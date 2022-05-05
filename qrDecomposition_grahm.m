@@ -1,4 +1,4 @@
-function [A,r] = qr_grahm(A)
+function x = qrDecomposition_grahm(A,b)
     r = zeros(size(A,1),size(A,2));
     [rows,cols] = size(A); 
     m = rows;
@@ -31,8 +31,9 @@ function [A,r] = qr_grahm(A)
         end
         
     end
-
+    q = A;
+    y = linsolve(q,b);
+    x = linsolve(r,y);
 end
 
-y = linsolve(q,b);
-x = linsolve(r,y);
+

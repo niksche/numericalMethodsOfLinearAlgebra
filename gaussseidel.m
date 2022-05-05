@@ -1,24 +1,34 @@
+function x = gaussSeidel(A, b)
+    F = -triu(A, 1);
+    E = -tril(A, -1);
+    D = diag(diag(A));
+    n = length(A);
+    M = inv(D-E) * F;
+    if (norm(M) > 1)
+        disp(M);
+        disp("||M|| = ");
+        disp(norm(M));
+        disp(" > 1  -  решение не сходится");
 
-%% Algorithm: Gauss Seidel Method
-%%
-function x = gaussseidel(A,b)
-    x=[0 0 0 0 0]'
-    n=size(A,1);
-    normVal=Inf; 
-    tol=1e-5; itr=0;
-    while normVal>tol
-        x_old=x;
-        for i=1:n
-            sigma=0;
-            for j=1:i-1
-                sigma=sigma+A(i,j)*x(j);
-            end
-            for j=i+1:n
-                sigma=sigma+A(i,j)*x_old(j);
-            end
-            x(i)=(1/A(i,i))*(b(i)-sigma);
+    end
+
+    eps = 0.0001;
+    x = [0 0 0 0 0]';
+    n = length(A);
+
+    for i = 1:100000
+        for j = 1:n
+            s1 = sum(A(j,:)*x);
+            s2 = A(j,j)*x(j);
+            x(j) = (b(j) - s1 + s2)/A(j,j);
         end
-    itr=itr+1;
-    normVal=norm(x_old-x);
+
+        if (max(abs(A*x- b)) < eps)
+            disp(x);
+            break;
+        end
     end
 end
+    
+%A(1,3)  = A(1,3) + 0.05;
+%A(3,1) = A(3,1) + 0.05;
